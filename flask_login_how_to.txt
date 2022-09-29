@@ -1,0 +1,40 @@
+#1 Define a user_loader
+	@login_manager.user_loader
+		def load_user(user_id):
+    		return User.query.get(int(user_id))
+
+#2 initialize a LoginManager using your application
+	login_manager = LoginManager(app)
+
+#3 Is necessary a secret key to the flask_login to work
+	import secrets
+
+#4 User class need to have 
+	is_authenticated
+	is_active
+	is_anonymous
+	get_id
+
+	Import Usermixin from flask_login to have access to all this properties and methods, is easier.
+	Inside the models of your database pass Usermixin as parameter
+
+		def User(db.Model, Usermixin):
+			pass
+
+#5 after the user is authenticated, use login_user(user)  #user is an instance of your class User
+
+#6 Now the user is logged
+
+#7 Access the logged-in user with (current_user) proxy that is available in every template
+	ex: {% if current_user is authenticated %}
+	<p> Hi {{ current_user.name }} </p>
+
+#8 Block pages for non-logged users using the decorator @login_required
+	ex: An account.html page
+
+#9 When user is ready to logout
+	@app.route("/logout")
+	@login_required
+	def logout():
+    		logout_user()
+    		return redirect(somewhere)
